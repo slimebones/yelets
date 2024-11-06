@@ -1,6 +1,6 @@
 set shell := ["nu", "-c"]
 
-files := "src/main.c src/utils.c"
+files := "main.c lib/utils.c"
 
 run: compile
     @ ./bin/main.exe

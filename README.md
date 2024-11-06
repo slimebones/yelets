@@ -34,6 +34,7 @@ Collection of core objects implemented internally.
     * Structs: first object must contain all keys of the following objects, for these keys all types must be compatible.
     * Other types: must be directly equal.
 * `return <object struct>` - Returns struct instance from the block.
+* `as <target_state struct> <input_state_args *any> <input_state_kwargs **any>` - Converts incoming *digested* struct into target state. First args of the input state are mapped to the first keys of the target, left appended as is. Example: `(a int b int c int) > as (x int, y int) > debug *   // Prints: x`
 
 * `add <objects *any>` - Adds alel objects in order. Types of all objects must be compatible.
 * `sub <objects *any>` - Subtracts all objects in order. Types of all objects must be compatible.
@@ -76,17 +77,24 @@ Any function being attached to a field of struct, can make use of `self` input
 field name. When such name is used as a first argument of such function, it will
 be populated with an actual reference to the hosting struct. If such name is not on the first position, an interpreter panic is thrown. Functions defining `self` as the first argument are considered as a struct's `methods`, and can be referenced from the point of an instance: `rect.calculate_area ...`. Functions without `self` are considered as `statics`. They are references only by struct's type: `Rect::calculate_area`
 
-## Yelets Project
+### Yelets Project
 Directory containing `./.yelets` subdirectory is considered a Yelets project. Such project can access installed dependencies located at `./.yelets/deps`.
 
-## FFI
+### FFI
 TODO
+
+### Struct Digestion
+TODO: Process of decomposing struct's fields into...
+
+### Spread Operators `*` and `**`
+TODO: Can be use in several contexts: type context and function argument position context.
 
 ## Standard Library
 Collection of objects implemented in Yelets.
 
 ### Structs
-* `Writer (write (value byte[])(written int, e err))` - Writes bytes to the underlying data stream. Implementations must not retain `value`. Returns number of bytes written.
+* `Writer(write (value byte[])(written int, e err))` - Writes bytes to the underlying data stream. Implementations must not retain `value`. Returns number of bytes written.
 
 ### Functions
-* `print (object any, target Writer)` - Tries to print given object in the best possible way.
+* `repr(object any, target Writer) (r str)` - Tries to get best possible string representation of the object.
+* `debug(object any, target Writer) ()` - Tries to print given object to stderr in the best possible way for development purposes.
