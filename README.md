@@ -17,6 +17,9 @@ Collection of core objects implemented internally.
 * `//` - Comments.
 * `*` - Positional spread.
 * `**` - Keyword spread.
+* `&&` - Logical AND.
+* `||` - Logical OR.
+* `!` - Logical negation.
 
 ### Instructions
 * `(...)` - Shortcut to `struct::new_type <raw str>`.
@@ -34,7 +37,12 @@ Collection of core objects implemented internally.
     * Structs: first object must contain all keys of the following objects, for these keys all types must be compatible.
     * Other types: must be directly equal.
 * `return <object struct>` - Returns struct instance from the block.
-* `as <target_state struct> <input_state_args *any> <input_state_kwargs **any>` - Converts incoming *digested* struct into target state. First args of the input state are mapped to the first keys of the target, left appended as is. Example: `(a int b int c int) > as (x int, y int) > debug *   // Prints: x`
+* `as <target_state struct> <input_state_args *any> <input_state_kwargs **any>` - Converts incoming *digested* struct into target state. First args of the input state are mapped to the first keys of the target, remaining ones are discarded. Example: `(a int, b int, c int)::new 1 2 3 > as (x int, y int) > debug  // Prints: (x: 1, y: 2)`.
+
+* `for` - TODO
+* `while` - TODO
+
+* `if <condition bool> <pass_args *any> <pass_kwargs **any>` - Passes args and kwargs further if condition is true, otherwise stops the current instruction execution.
 
 * `add <objects *any>` - Adds alel objects in order. Types of all objects must be compatible.
 * `sub <objects *any>` - Subtracts all objects in order. Types of all objects must be compatible.
@@ -62,7 +70,7 @@ Collection of core objects implemented internally.
 * `metatype` - Special type which can create child types. Every metatype has `new_type` function which is responsible for creating new types. This function is internally used by instruction `def`, which propagate it's given args and kwargs to this function.
 * `any` - Can point to anything.
 * `arr` - Contains objects of compatible type. It's a `metatype`.
-* `struct` - The main structure passed in pipes. Contains __ordered__ values associated with string keys. Every value has information about it's type. It's a `metatype`.
+* `struct` - The main structure passed in pipes. Contains __ordered__ values associated with string keys. Keys must be `[^0-9][A-z0-9]+` Every value has information about it's type. It's a `metatype`.
 * `block` - Collection of instructions. It's a `metatype`.
 * `fn` - Function - collection of instructions with a local state. Function accepts struct and returns struct. It's a `metatype`. Could have external implementation, if created using `extern` instruction.
 
@@ -98,3 +106,4 @@ Collection of objects implemented in Yelets.
 ### Functions
 * `repr(object any, target Writer) (r str)` - Tries to get best possible string representation of the object.
 * `debug(object any, target Writer) ()` - Tries to print given object to stderr in the best possible way for development purposes.
+* `format(s str, spec struct)` - Formats string using spec. `{}` is used inside string for spec's placement. `{0}` would reference first argument of the spec, `{name}` will reference argument under `name` key.
