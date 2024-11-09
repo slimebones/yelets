@@ -8,7 +8,7 @@ Pipeline programming language.
 ## Reference
 ## Built-In
 #### Operators
-* `>` - Transfers struct from instruction output to the left, to the instruction input to the right. If the right target is the function, it immediatelly gets called. By default, the passed struct is digested into args and kwargs: args are appended after existing args of the call, kwargs are appended after existing kwargs of the call. Append position can be modified with `*` and `**` spread operators. To skip the digestion, use `>>`, the struct will be passed as a whole. If the instruction to the right cannot handle all the incoming data, but received enough, redundant fields are discarded. Use `~>` to destroy the struct and pass nothing. We do not support the opposite `<` for better readability.
+* `>` - Transfers struct from instruction output to the left, to the instruction input to the right. If the right target is the function, it immediatelly gets called. By default, the passed struct is digested into args and appended after existing args of the call. Append position can be modified with `*` and `**` spread operators. To skip the digestion, use `>>`, the struct will be passed as a whole. If the instruction to the right cannot handle all the incoming data, but received enough, redundant fields are discarded. Use `~>` to destroy the struct and pass nothing. We do not support the opposite `<` for better readability.
 * `()` - Struct brackets.
 * `[]` - Array brackets.
 * `{}` - Block brackets.
@@ -85,7 +85,8 @@ Pipeline programming language.
 
 #### Directives
 Directives are special calls available using `#` prefix.
-* `#import path_without_extension` - Brings a Yelets file into local scope. All file's top-level objects, which name does not start with `_`, become available in the local scope under the imported file's name (without extension). All imported objects must be called using `imported_name::desired_object` notation. We don't want to support `#using <namespace>` in the near future. If imported object names conflicts with the existing ones in the importing scope, an immediate interpreter panic will be raised. Import path is always relative. Alternatively, you can use `#import <dependency_path_without_extension>` (`<>` arrows intended), to import relative to `./.yelets/deps` directory.
+* `#import path_without_extension` - Brings a Yelets file into local scope. All file's top-level objects, which name does not start with `_`, become available in the local scope under the imported file's name (without extension). All imported objects must be called using `imported_name::desired_object` notation. We don't want to support `#using <namespace>` in the near future. If imported object names conflicts with the existing ones in the importing scope, an immediate interpreter panic will be raised. Import path is always relative. Alternatively, you can use `#import @dependency_path_without_extension>` (`<>` arrows intended), to import relative to `./.yelets/deps` directory.
+* `#loop` - All instructions below will be looped until `break` or program exit is occured.
 
 ### Standard Library
 #### Structs
@@ -94,6 +95,7 @@ Directives are special calls available using `#` prefix.
 #### Functions
 * `repr(object any, target Writer) (r str)` - Tries to get best possible string representation of the object.
 * `print(object any) ()` - Tries to print given object to stderr in the best possible way.
+* `printf(object any, spec struct) ()`
 * `format(s str, spec struct)` - Formats string using spec. `{}` is used inside string for spec's placement. `{0}` would reference first argument of the spec, `{name}` will reference argument under `name` key.
 
 ## Explanation
