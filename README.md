@@ -1,9 +1,13 @@
 # Yelets
+NOTE: The language does not have implementation at the moment, so for now it's just a concept. You can see the examples in `examples/`.
+
 Pipeline programming language.
 
 ## Getting Started
+TODO
 
 ## How-to
+TODO
 
 ## Reference
 ## Built-In
